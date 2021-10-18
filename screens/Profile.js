@@ -1,24 +1,31 @@
-import React, { useLayoutEffect, useState } from "react";
-import { Text, StyleSheet, SafeAreaView, View, TouchableOpacity, ScrollView, Image } from "react-native";
+import React, {useState} from "react";
+import { SafeAreaView, Text, View, StyleSheet, TouchableOpacity, ScrollView, Image } from "react-native";
 import { Ionicons } from '@expo/vector-icons';
 import { AntDesign } from '@expo/vector-icons';
 import { auth } from '../firebase';
 import AsyncStorage from '@react-native-community/async-storage'
+import { Entypo } from '@expo/vector-icons';
 
 const homeName = 'home-outline';
 const profileName = 'person-outline';
 const settingName = 'settings-outline';
 
-const HomePage = ({navigation}) => {
+const Profile = ({navigation}) => {
 
-    //get user id
-    const [getValue, setGetValue] = useState('');
+    //get user details
+    const [email, setEmail] = useState('');
+    const [name, setName] = useState('');
 
-    AsyncStorage.getItem('userId').then(
+    AsyncStorage.getItem('useremail').then(
         (value) =>
-          setGetValue(value),
+          setEmail(value),
     );
-    console.log(getValue);
+    AsyncStorage.getItem('username').then(
+        (value) =>
+          setName(value),
+    );
+    console.log(email);
+    console.log(name);
 
     //signout function
     const signout = () => {
@@ -35,19 +42,19 @@ const HomePage = ({navigation}) => {
         });
     }
 
-
     return(
         <SafeAreaView style={styles.container}>
             <ScrollView style={styles.scrollView}>
                 <View style={styles.innerCon}>
+                
                     <View style={styles.TabBarMainContainer} >
-                    
+
                         <TouchableOpacity 
                             onPress={() => navigation.navigate('HomePage')}
                             activeOpacity={0.6} 
                             style={styles.leftbtn} 
                         >
-                            <Ionicons style={styles.activeicon} name={homeName} size={23} color={'black'} />
+                            <Ionicons name={homeName} size={23} color={'black'} />
                             <Text style={styles.TextStyle} > Home </Text>
                             
                         </TouchableOpacity>
@@ -59,7 +66,7 @@ const HomePage = ({navigation}) => {
                             activeOpacity={0.6} 
                             style={styles.button} 
                         >
-                            <Ionicons name={profileName} size={23} color={'black'} />
+                            <Ionicons style={styles.activeicon}  name={profileName} size={23} color={'black'} />
                             <Text style={styles.TextStyle}> Profile </Text>
                         </TouchableOpacity>
 
@@ -85,33 +92,25 @@ const HomePage = ({navigation}) => {
 
                     </View>
 
-                    <Image style={styles.pageLogo} source={require('../assets/images/homepage.png')} />
+                    <Image style={styles.pageLogo} source={require('../assets/images/man.png')} />
 
-                    <View style={styles.boxView}>
-                        <TouchableOpacity
-                            onPress={() => navigation.navigate('Workout')}  
-                            style={styles.tile}
-                        >
-                                <Image style={styles.image} source={require('../assets/images/workout.png')} />
-                                <Text style={styles.tileText}>Workout</Text>
-                        </TouchableOpacity>
-                        
-                        <TouchableOpacity
-                            onPress={() => navigation.navigate('Reminder')}  
-                            style={styles.tile}
-                        >
-                            <Image style={styles.image} source={require('../assets/images/reminder.png')} />
-                            <Text style={styles.tileText}>Reminder</Text>
-                        </TouchableOpacity>
+                    <Text style={styles.pageTitle}><AntDesign name="user" size={30} color="green" />  {name}</Text>
+                    <Text style={styles.pageTitle}><Entypo name="email" size={30} color="red" /> {email}</Text>
+
+                    <TouchableOpacity 
+                        onPress={() => navigation.navigate('UpdateProfile')} 
+                        style={styles.buttonUpdate}>
+                        <Text style={styles.btnText}>Update Profile  <AntDesign name="edit" size={24} color="green" /></Text>
+                    </TouchableOpacity>
+
+                    <View style={styles.rowc}>
+                        <Text style={styles.copyright}>scheduleMe © 2021</Text>
                     </View>
-
-                    <Text style={styles.subTitle}>Schedule Your Reminder, Workout and Everything in One Place...</Text>
 
                 </View>
             </ScrollView>
         </SafeAreaView>
-        
-    );
+    )
 };
 
 const styles = StyleSheet.create({
@@ -120,8 +119,6 @@ const styles = StyleSheet.create({
         width: '100%',
         height: '100%',
         backgroundColor: '#f7f8Fa',
-        justifyContent: 'center',
-        
     },
     scrollView: {
         backgroundColor: '#f7f8Fa',
@@ -138,7 +135,6 @@ const styles = StyleSheet.create({
         borderBottomRightRadius: 10,
         paddingHorizontal: '15%',
         marginTop: '2%',
-        
     },   
     button: {
         height: 50,
@@ -151,22 +147,19 @@ const styles = StyleSheet.create({
         marginRight: '1px',
         boxShadow: '5px 5px 5px 1px #888888',
     }, 
-    subTitle: {
-        marginTop: '2%',
-        fontSize: '20px',
-        fontAlign: 'center',
-        fontWeight: 'bold',
-        color: 'black',
-        padding: '25px',
-        justifyContent: 'center',
-        textAlign: 'center',
-    },
     TextStyle:{
         color:'#fff',
         textAlign:'center',
         fontSize: 10,
         color: 'black',
         fontWeight: 'bold',
+    },
+    pageTitle: {
+        fontSize: '35px',
+        fontAlign: 'center',
+        fontWeight: 'bolder',
+        color: 'black',
+        padding: '10px',
     },
     leftbtn: {
         height: 50,
@@ -190,53 +183,57 @@ const styles = StyleSheet.create({
         flexGrow: 1,
         borderBottomRightRadius: 15,
         borderTopRightRadius: 15,
-        boxShadow: '5px 5px 5px 1px #888888',
         margin: 0,
+        boxShadow: '5px 5px 5px 1px #888888',
     },
     activeicon: {
         color: 'blue',
         margin: 0,
     },
     pageLogo: {
-        width: '250px',
-        height: '250px',
+        width: '150px',
+        height: '150px',
         marginTop: '5%',
-        // justifyContent: 'center',
-        // alignItems: 'center',
+        marginBottom: '5%',
     },
-    boxView: {
-        marginTop: '2%',
-        justifyContent: 'center',
+    rowc: {
+        fontSize: 20,
+        fontWeight: 'bold',
         flexDirection: 'row',
-        //backgroundColor: 'blue',
-        width: '80%',
-        height: '40%',
+        marginTop: '5%',
+        bottom: 0,
     },
-    tile: {
-        width: '43%',
-        height: '100%',
-        //backgroundColor: 'grey',
-        marginRight: '2%',
-        padding: '1%',
+    copyright: {
+        justifyContent: 'center',
+        fontSize: 15,
+        fontWeight: 'bold',
+        color: 'black',
+        alignItems: 'center',
+        marginTop: '90%'
+    },
+    buttonUpdate: {
+        width: '40%',
+        height: '40px',
+        borderRadius: 20,
+        backgroundColor: 'white',
         justifyContent: 'center',
         alignItems: 'center',
+        textAlign: 'center',
         borderColor: 'grey',
-        borderWidth: 0.5,
-        borderRadius: 20,
+        borderWidth: 2,
         boxShadow: '5px 5px 5px #888888',
+        marginTop: '5%'
     },
-    image: {
-        width: '85%',
-        height: '80%',
-    },
-    tileText: {
+    btnText: {
         fontSize: '20px',
         fontAlign: 'center',
-        fontWeight: 'bolder',
+        fontWeight: 'bold',
         color: 'black',
         padding: '10px',
+        justifyContent: 'center',
+        textAlign: 'center',
     },
 });
 
-export default HomePage;
 
+export default Profile;

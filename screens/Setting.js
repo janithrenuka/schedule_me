@@ -1,5 +1,5 @@
-import React, { useLayoutEffect, useState } from "react";
-import { Text, StyleSheet, SafeAreaView, View, TouchableOpacity, ScrollView, Image } from "react-native";
+import React from "react";
+import { SafeAreaView, Text, View, StyleSheet, TouchableOpacity, ScrollView, Image } from "react-native";
 import { Ionicons } from '@expo/vector-icons';
 import { AntDesign } from '@expo/vector-icons';
 import { auth } from '../firebase';
@@ -9,16 +9,7 @@ const homeName = 'home-outline';
 const profileName = 'person-outline';
 const settingName = 'settings-outline';
 
-const HomePage = ({navigation}) => {
-
-    //get user id
-    const [getValue, setGetValue] = useState('');
-
-    AsyncStorage.getItem('userId').then(
-        (value) =>
-          setGetValue(value),
-    );
-    console.log(getValue);
+const Setting = ({navigation}) => {
 
     //signout function
     const signout = () => {
@@ -35,19 +26,19 @@ const HomePage = ({navigation}) => {
         });
     }
 
-
     return(
         <SafeAreaView style={styles.container}>
             <ScrollView style={styles.scrollView}>
                 <View style={styles.innerCon}>
+                {/* <Text>Settings</Text> */}
                     <View style={styles.TabBarMainContainer} >
-                    
-                        <TouchableOpacity 
+    
+                    <TouchableOpacity 
                             onPress={() => navigation.navigate('HomePage')}
                             activeOpacity={0.6} 
                             style={styles.leftbtn} 
                         >
-                            <Ionicons style={styles.activeicon} name={homeName} size={23} color={'black'} />
+                            <Ionicons name={homeName} size={23} color={'black'} />
                             <Text style={styles.TextStyle} > Home </Text>
                             
                         </TouchableOpacity>
@@ -68,7 +59,7 @@ const HomePage = ({navigation}) => {
                             activeOpacity={0.6} 
                             style={styles.button} 
                         >
-                            <Ionicons name={settingName} size={23} color={'black'} />
+                            <Ionicons style={styles.activeicon}  name={settingName} size={23} color={'black'} />
                             <Text style={styles.TextStyle}> Settings </Text>
                         </TouchableOpacity>
 
@@ -85,46 +76,23 @@ const HomePage = ({navigation}) => {
 
                     </View>
 
-                    <Image style={styles.pageLogo} source={require('../assets/images/homepage.png')} />
-
-                    <View style={styles.boxView}>
-                        <TouchableOpacity
-                            onPress={() => navigation.navigate('Workout')}  
-                            style={styles.tile}
-                        >
-                                <Image style={styles.image} source={require('../assets/images/workout.png')} />
-                                <Text style={styles.tileText}>Workout</Text>
-                        </TouchableOpacity>
-                        
-                        <TouchableOpacity
-                            onPress={() => navigation.navigate('Reminder')}  
-                            style={styles.tile}
-                        >
-                            <Image style={styles.image} source={require('../assets/images/reminder.png')} />
-                            <Text style={styles.tileText}>Reminder</Text>
-                        </TouchableOpacity>
-                    </View>
-
-                    <Text style={styles.subTitle}>Schedule Your Reminder, Workout and Everything in One Place...</Text>
-
+                    <Image style={styles.pageLogo} source={require('../assets/images/loading.gif')} />
+                    <Text style={styles.pageTitle}>Coming Soon...</Text>
                 </View>
             </ScrollView>
         </SafeAreaView>
-        
-    );
+    )
 };
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
         width: '100%',
-        height: '100%',
-        backgroundColor: '#f7f8Fa',
-        justifyContent: 'center',
-        
+        height: '100%', 
+        backgroundColor: '#ffffff',
     },
     scrollView: {
-        backgroundColor: '#f7f8Fa',
+        backgroundColor: '#ffffff',
     },
     innerCon: {
         alignItems: 'center',
@@ -138,8 +106,15 @@ const styles = StyleSheet.create({
         borderBottomRightRadius: 10,
         paddingHorizontal: '15%',
         marginTop: '2%',
-        
-    },   
+    },  
+    pageTitle: {
+        marginTop: '5%',
+        fontSize: '35px',
+        fontAlign: 'center',
+        fontWeight: 'bolder',
+        color: 'black',
+        padding: '10px',
+    }, 
     button: {
         height: 50,
         paddingTop:10,
@@ -151,16 +126,6 @@ const styles = StyleSheet.create({
         marginRight: '1px',
         boxShadow: '5px 5px 5px 1px #888888',
     }, 
-    subTitle: {
-        marginTop: '2%',
-        fontSize: '20px',
-        fontAlign: 'center',
-        fontWeight: 'bold',
-        color: 'black',
-        padding: '25px',
-        justifyContent: 'center',
-        textAlign: 'center',
-    },
     TextStyle:{
         color:'#fff',
         textAlign:'center',
@@ -190,8 +155,8 @@ const styles = StyleSheet.create({
         flexGrow: 1,
         borderBottomRightRadius: 15,
         borderTopRightRadius: 15,
-        boxShadow: '5px 5px 5px 1px #888888',
         margin: 0,
+        boxShadow: '5px 5px 5px 1px #888888',
     },
     activeicon: {
         color: 'blue',
@@ -201,42 +166,7 @@ const styles = StyleSheet.create({
         width: '250px',
         height: '250px',
         marginTop: '5%',
-        // justifyContent: 'center',
-        // alignItems: 'center',
-    },
-    boxView: {
-        marginTop: '2%',
-        justifyContent: 'center',
-        flexDirection: 'row',
-        //backgroundColor: 'blue',
-        width: '80%',
-        height: '40%',
-    },
-    tile: {
-        width: '43%',
-        height: '100%',
-        //backgroundColor: 'grey',
-        marginRight: '2%',
-        padding: '1%',
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderColor: 'grey',
-        borderWidth: 0.5,
-        borderRadius: 20,
-        boxShadow: '5px 5px 5px #888888',
-    },
-    image: {
-        width: '85%',
-        height: '80%',
-    },
-    tileText: {
-        fontSize: '20px',
-        fontAlign: 'center',
-        fontWeight: 'bolder',
-        color: 'black',
-        padding: '10px',
     },
 });
 
-export default HomePage;
-
+export default Setting;

@@ -3,23 +3,25 @@ import { StyleSheet, View, Text, Image, Button, Alert, TouchableOpacity, SafeAre
 import { AntDesign } from '@expo/vector-icons';
 
 
-const Welcome = () => {
+const Welcome = ({navigation}) => {
 
     const title = "Schedule Me";
 
     return(
         <SafeAreaView>
             <View style={styles.styledCon}>
-                <View style={styles.innerCon}>
-                    <Image style={styles.pageLogo} source={require('../assets/images/home.jpg')} />
+                    <Image style={styles.pageLogo} source={require('../assets/images/welcome.png')} />
                     <Text style={styles.pageTitle}>Schedule Me 📝</Text>
-                    <Text style={styles.subTitle}>Schedule Your Expenses, Workout and Everything in One Place...</Text>
-                    <TouchableOpacity 
-                        onPress={() => Alert.alert('Button with adjusted color pressed')}
+                    <Text style={styles.subTitle}>Schedule Your Reminder, Workout and Everything in One Place...</Text>
+                    <TouchableOpacity
+                        onPress={() => navigation.navigate('Login')}
                         style={styles.button}>
                         <Text style={styles.btnText}>Start  <AntDesign name="arrowright" size={33} color="black" /></Text>
                     </TouchableOpacity>
-                </View>
+
+                    <View style={styles.row}>
+                        <Text style={styles.copyright}>scheduleMe © 2021</Text>
+                    </View>
             </View>
         </SafeAreaView>
         
@@ -29,13 +31,13 @@ const Welcome = () => {
 const styles = StyleSheet.create({
     styledCon: {
         flex: 1,
+        width:"100%",
+        height: "100%",
+        backgroundColor: "white",
         padding: '25px',
-        backgroundColor: '#ffffff',
-    },
-    innerCon: {
-        flex: 1,
-        width: '100%',
+        justifyContent: 'center',
         alignItems: 'center',
+        flexDirection: 'flex-end',
     },
     pageLogo: {
         width: '300px',
@@ -79,7 +81,21 @@ const styles = StyleSheet.create({
         padding: '10px',
         justifyContent: 'center',
         textAlign: 'center',
-    }
+    },
+    row: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        flexDirection: 'row',
+        marginTop: 8,
+        bottom: 0,
+    },
+    copyright: {
+        justifyContent: 'center',
+        fontSize: 15,
+        fontWeight: 'bold',
+        color: 'black',
+        alignItems: 'center',
+    },
 })
 
 export default Welcome;
